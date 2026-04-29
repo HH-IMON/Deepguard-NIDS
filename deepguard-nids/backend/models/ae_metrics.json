@@ -1,0 +1,33 @@
+{
+    "accuracy": 0.21672432113521972,
+    "precision": 0.48027020864891434,
+    "recall": 0.21672432113521972,
+    "f1_score": 0.1575563684541131,
+    "false_positive_rate": 0.05,
+    "confusion_matrix": [
+        [
+            157533,
+            37362
+        ],
+        [
+            724510,
+            60282
+        ]
+    ],
+    "training_time": "28.3s (Real)",
+    "inference_time": "2.0ms (Real)",
+    "description": "Anomaly detector using Isolation Forest, trained on 100% KDD dataset.",
+    "hyperparameters": "n_estimators=100, contamination=0.1",
+    "feature_importance": {
+        "src_bytes": 0.16666666666666666,
+        "dst_bytes": 0.16666666666666666,
+        "duration": 0.16666666666666666,
+        "count": 0.16666666666666666,
+        "srv_count": 0.16666666666666666,
+        "protocol": 0.16666666666666666
+    },
+    "classes": [
+        "Normal",
+        "DoS"
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "accuracy": 0.9838040108728604,
+    "precision": 0.9838509321554822,
+    "recall": 0.9838040108728604,
+    "f1_score": 0.9836024185429286,
+    "false_positive_rate": 0.01614906784451775,
+    "confusion_matrix": [
+        [
+            182082,
+            12813
+        ],
+        [
+            1867,
+            782925
+        ]
+    ],
+    "training_time": "1912.4s (Real)",
+    "inference_time": "1.5ms (Real)",
+    "description": "Deep Neural Network (MLP) capturing spatial features, trained on 100% KDD dataset.",
+    "hyperparameters": "{'activation': 'relu', 'alpha': 0.0001, 'batch_size': 'auto', 'beta_1': 0.9, 'beta_2': 0.999, 'early_stopping': False, 'epsilon': 1e-08, 'hidden_layer_sizes': (128, 64, 32), 'learning_rate': 'constant', 'learning_rate_init': 0.001, 'max_fun': 15000, 'max_iter': 20, 'momentum': 0.9, 'n_iter_no_change': 10, 'nesterovs_momentum': True, 'power_t': 0.5, 'random_state': 42, 'shuffle': True, 'solver': 'adam', 'tol': 0.0001, 'validation_fraction': 0.1, 'verbose': False, 'warm_start': False}",
+    "feature_importance": {
+        "src_bytes": 0.16666666666666666,
+        "dst_bytes": 0.16666666666666666,
+        "duration": 0.16666666666666666,
+        "count": 0.16666666666666666,
+        "srv_count": 0.16666666666666666,
+        "protocol": 0.16666666666666666
+    },
+    "classes": [
+        "Brute Force",
+        "DoS",
+        "Infiltration",
+        "Normal",
+        "Port Scan"
+    ]
+}

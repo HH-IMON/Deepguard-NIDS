@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepGuard NIDS — AI Network Intrusion Detection System</title>
+    <meta name="description" content="Real-time AI-powered network intrusion detection and prevention system with advanced threat analytics and visualization.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- ANIMATED BACKGROUND -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="bg-aurora">
+    <div class="aurora-orb aurora-orb-1"></div>
+    <div class="aurora-orb aurora-orb-2"></div>
+    <div class="aurora-orb aurora-orb-3"></div>
+    <div class="aurora-orb aurora-orb-4"></div>
+    <div class="grid-overlay"></div>
+</div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- HEADER -->
+<!-- ═══════════════════════════════════════════ -->
+<header class="header" id="main-header">
+    <div class="header-left">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 40 40" fill="none"><path d="M20 4L4 12v16l16 8 16-8V12L20 4z" stroke="url(#logo-grad)" stroke-width="2" fill="none"/><path d="M20 12l-8 4v8l8 4 8-4v-8l-8-4z" fill="url(#logo-grad)" opacity="0.3"/><circle cx="20" cy="20" r="4" fill="url(#logo-grad)"/><defs><linearGradient id="logo-grad" x1="0" y1="0" x2="40" y2="40"><stop stop-color="#6366f1"/><stop offset="1" stop-color="#06b6d4"/></linearGradient></defs></svg>
+            </div>
+            <div>
+                <h1 class="logo-title">DeepGuard <span class="accent-text">NIDS</span></h1>
+                <p class="logo-subtitle">AI-Powered Network Intrusion Detection</p>
+            </div>
+        </div>
+    </div>
+    <div class="header-center">
+        <div class="sim-controls">
+            <button id="btn-start-sim" class="btn btn-glow btn-success" onclick="startSimulation()">
+                <span class="btn-icon">▶</span> Start Detection
+            </button>
+            <button id="btn-stop-sim" class="btn btn-danger" onclick="stopSimulation()" style="display:none">
+                <span class="btn-icon">■</span> Stop Detection
+            </button>
+            <div class="sim-status" id="sim-status">
+                <span class="status-dot status-inactive"></span>
+                <span id="sim-status-text">Idle</span>
+            </div>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="model-selector">
+            <label>Active Model:</label>
+            <select id="model-select" onchange="switchModel(this.value)">
+                <option value="random_forest">Random Forest</option>
+                <option value="xgboost">XGBoost</option>
+                <option value="lstm">LSTM (Deep Learning)</option>
+                <option value="cnn_1d">1D CNN (Deep Learning)</option>
+                <option value="autoencoder">Autoencoder (Anomaly)</option>
+            </select>
+        </div>
+        <button class="btn btn-ghost" id="btn-theme" onclick="toggleTheme()" title="Toggle Theme">
+            <span id="theme-icon">🌙</span>
+        </button>
+    </div>
+</header>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- NAV TABS -->
+<!-- ═══════════════════════════════════════════ -->
+<nav class="nav-tabs" id="main-nav">
+    <button class="nav-tab active" data-tab="dashboard" onclick="switchTab('dashboard')">
+        <span class="tab-icon">📊</span> Dashboard
+    </button>
+    <button class="nav-tab" data-tab="alerts" onclick="switchTab('alerts')">
+        <span class="tab-icon">🚨</span> Alerts <span class="badge" id="alert-badge">0</span>
+    </button>
+    <button class="nav-tab" data-tab="traffic" onclick="switchTab('traffic')">
+        <span class="tab-icon">📡</span> Traffic Logs
+    </button>
+    <button class="nav-tab" data-tab="blocking" onclick="switchTab('blocking')">
+        <span class="tab-icon">🛡️</span> IP Blocking
+    </button>
+    <button class="nav-tab" data-tab="evaluation" onclick="switchTab('evaluation')">
+        <span class="tab-icon">📈</span> Model Evaluation
+    </button>
+    <button class="nav-tab" data-tab="explainability" onclick="switchTab('explainability')">
+        <span class="tab-icon">🧠</span> Explainable AI
+    </button>
+</nav>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- MAIN CONTENT -->
+<!-- ═══════════════════════════════════════════ -->
+<main class="main-content" id="main-content">
+
+    <!-- ── DASHBOARD TAB ── -->
+    <section class="tab-panel active" id="panel-dashboard">
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card stat-card-gradient-1" id="stat-traffic">
+                <div class="stat-icon">📡</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-total-traffic">0</span>
+                    <span class="stat-label">Total Packets</span>
+                </div>
+                <div class="stat-sparkline"></div>
+            </div>
+            <div class="stat-card stat-card-gradient-2" id="stat-attacks">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-total-attacks">0</span>
+                    <span class="stat-label">Attacks Detected</span>
+                </div>
+            </div>
+            <div class="stat-card stat-card-gradient-3" id="stat-blocked">
+                <div class="stat-icon">🛡️</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-total-blocked">0</span>
+                    <span class="stat-label">IPs Blocked</span>
+                </div>
+            </div>
+            <div class="stat-card stat-card-gradient-4" id="stat-alerts">
+                <div class="stat-icon">🔔</div>
+                <div class="stat-info">
+                    <span class="stat-value" id="stat-pending-alerts">0</span>
+                    <span class="stat-label">Pending Alerts</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Threat Level + Charts Row -->
+        <div class="dashboard-grid">
+            <!-- Threat Level Gauge -->
+            <div class="glass-card threat-card">
+                <h3 class="card-title">🎯 Threat Level</h3>
+                <div class="threat-gauge" id="threat-gauge">
+                    <svg viewBox="0 0 200 120" class="gauge-svg">
+                        <defs>
+                            <linearGradient id="gauge-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#10b981"/>
+                                <stop offset="25%" stop-color="#f59e0b"/>
+                                <stop offset="50%" stop-color="#f97316"/>
+                                <stop offset="75%" stop-color="#ef4444"/>
+                                <stop offset="100%" stop-color="#dc2626"/>
+                            </linearGradient>
+                        </defs>
+                        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12" stroke-linecap="round"/>
+                        <path d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gauge-grad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="251" id="gauge-arc"/>
+                        <text x="100" y="90" text-anchor="middle" class="gauge-value" id="gauge-value-text">SAFE</text>
+                        <text x="100" y="110" text-anchor="middle" class="gauge-score" id="gauge-score-text">Score: 0</text>
+                    </svg>
+                </div>
+                <div class="threat-stats" id="threat-stats">
+                    <div class="threat-stat"><span class="ts-label">Active Threats</span><span class="ts-value" id="ts-active">0</span></div>
+                    <div class="threat-stat"><span class="ts-label">Critical</span><span class="ts-value ts-critical" id="ts-critical">0</span></div>
+                    <div class="threat-stat"><span class="ts-label">Detection Rate</span><span class="ts-value" id="ts-rate">0%</span></div>
+                </div>
+            </div>
+
+            <!-- Live Traffic Chart -->
+            <div class="glass-card chart-card-wide">
+                <h3 class="card-title">📊 Live Traffic Monitor</h3>
+                <div class="chart-container">
+                    <canvas id="chart-traffic"></canvas>
+                </div>
+            </div>
+
+            <!-- Attack Distribution -->
+            <div class="glass-card">
+                <h3 class="card-title">🎯 Attack Distribution</h3>
+                <div class="chart-container chart-container-square">
+                    <canvas id="chart-attacks"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Live Feed -->
+        <div class="glass-card">
+            <h3 class="card-title">⚡ Live Event Feed</h3>
+            <div class="live-feed" id="live-feed">
+                <div class="feed-placeholder">Start the detection engine to see live events...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── ALERTS TAB ── -->
+    <section class="tab-panel" id="panel-alerts">
+        <div class="glass-card">
+            <div class="card-header">
+                <h3 class="card-title">🚨 Security Alerts</h3>
+                <div class="card-actions">
+                    <select id="alert-filter" onchange="loadAlerts()">
+                        <option value="">All Alerts</option>
+                        <option value="new">New Only</option>
+                        <option value="acknowledged">Acknowledged</option>
+                    </select>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table" id="alerts-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Severity</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alerts-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── TRAFFIC TAB ── -->
+    <section class="tab-panel" id="panel-traffic">
+        <div class="glass-card">
+            <div class="card-header">
+                <h3 class="card-title">📡 Network Traffic Logs</h3>
+                <div class="card-actions">
+                    <label class="toggle-label">
+                        <input type="checkbox" id="attack-only-filter" onchange="loadTraffic()">
+                        <span>Attacks Only</span>
+                    </label>
+                </div>
+            </div>
+            <div class="table-wrapper">
+                <table class="data-table" id="traffic-table">
+                    <thead>
+                        <tr>
+                            <th>Source IP</th>
+                            <th>Dest IP</th>
+                            <th>Protocol</th>
+                            <th>Port</th>
+                            <th>Size</th>
+                            <th>Prediction</th>
+                            <th>Confidence</th>
+                            <th>Model</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="traffic-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── IP BLOCKING TAB ── -->
+    <section class="tab-panel" id="panel-blocking">
+        <div class="blocking-grid">
+            <!-- Manual Block Form -->
+            <div class="glass-card">
+                <h3 class="card-title">🛡️ Manual IP Blocking</h3>
+                <p class="card-desc">Manually block suspicious IP addresses. Blocking is NOT automatic — you have full control.</p>
+                <form id="block-form" onsubmit="blockIP(event)">
+                    <div class="form-group">
+                        <label>IP Address</label>
+                        <input type="text" id="block-ip-input" placeholder="e.g., 192.168.1.100" required pattern="^[\d\.]+$">
+                    </div>
+                    <div class="form-group">
+                        <label>Reason</label>
+                        <input type="text" id="block-reason-input" placeholder="Reason for blocking" value="Manually blocked by administrator">
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-full">
+                        <span class="btn-icon">🚫</span> Block IP Address
+                    </button>
+                </form>
+            </div>
+
+            <!-- Threat Intelligence - IPs to Consider Blocking -->
+            <div class="glass-card">
+                <h3 class="card-title">🔍 Threat Intelligence</h3>
+                <p class="card-desc">IPs with highest strike counts. Click to auto-fill the block form.</p>
+                <div id="threat-list" class="threat-list">
+                    <div class="feed-placeholder">Start detection to see threat intelligence...</div>
+                </div>
+            </div>
+
+            <!-- Currently Blocked IPs -->
+            <div class="glass-card glass-card-full">
+                <h3 class="card-title">🔒 Currently Blocked IPs</h3>
+                <div class="table-wrapper">
+                    <table class="data-table" id="blocked-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>IP Address</th>
+                                <th>Reason</th>
+                                <th>Blocked At</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="blocked-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── MODEL EVALUATION TAB ── -->
+    <section class="tab-panel" id="panel-evaluation">
+        <div class="glass-card">
+            <h3 class="card-title">📈 Model Performance Comparison</h3>
+            <p class="card-desc">Evaluation metrics across all trained models using CICIDS dataset. Recall and False Positive Rate are emphasized for IDS performance.</p>
+        </div>
+
+        <!-- Model Comparison Cards -->
+        <div class="eval-grid" id="eval-grid">
+            <!-- Populated by JS -->
+        </div>
+
+        <!-- Comparison Charts -->
+        <div class="eval-charts-grid">
+            <div class="glass-card">
+                <h3 class="card-title">📊 Metrics Comparison</h3>
+                <div class="chart-container">
+                    <canvas id="chart-eval-comparison"></canvas>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="card-title">🎯 Confusion Matrix</h3>
+                <div id="confusion-matrix-container">
+                    <select id="cm-model-select" onchange="renderConfusionMatrix(this.value)" class="cm-select">
+                        <option value="random_forest">Random Forest</option>
+                        <option value="xgboost">XGBoost</option>
+                        <option value="lstm">LSTM</option>
+                        <option value="cnn_1d">1D CNN</option>
+                        <option value="autoencoder">Autoencoder</option>
+                    </select>
+                    <div class="confusion-grid" id="confusion-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── EXPLAINABLE AI TAB ── -->
+    <section class="tab-panel" id="panel-explainability">
+        <div class="glass-card">
+            <h3 class="card-title">🧠 Explainable AI (XAI)</h3>
+            <p class="card-desc">Understanding model decisions through feature importance analysis and SHAP-style value attribution.</p>
+        </div>
+        <div class="xai-grid">
+            <div class="glass-card">
+                <h3 class="card-title">📊 Feature Importance</h3>
+                <div class="xai-model-select">
+                    <select id="xai-model-select" onchange="loadFeatureImportance(this.value)">
+                        <option value="random_forest">Random Forest</option>
+                        <option value="xgboost">XGBoost</option>
+                        <option value="lstm">LSTM</option>
+                        <option value="cnn_1d">1D CNN</option>
+                        <option value="autoencoder">Autoencoder</option>
+                    </select>
+                </div>
+                <div class="chart-container">
+                    <canvas id="chart-feature-importance"></canvas>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="card-title">🔬 SHAP Value Analysis</h3>
+                <div id="shap-container" class="shap-container">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+            <div class="glass-card glass-card-full">
+                <h3 class="card-title">📝 Model Decision Explanation</h3>
+                <div id="decision-explanation" class="decision-explanation">
+                    <p>Select a model and start the detection engine to see how each model makes its decisions. The explanation will show which features contributed most to each prediction.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- TOAST CONTAINER -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="toast-container" id="toast-container"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- LOADING OVERLAY -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="loading-overlay" id="loading-overlay">
+    <div class="loading-spinner">
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <div class="spinner-ring"></div>
+        <p class="loading-text">Initializing DeepGuard NIDS...</p>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
+</html>

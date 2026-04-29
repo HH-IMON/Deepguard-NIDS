@@ -1,0 +1,36 @@
+{
+    "accuracy": 0.9976788504900035,
+    "precision": 0.9976722480555159,
+    "recall": 0.9976788504900035,
+    "f1_score": 0.99754738857502,
+    "false_positive_rate": 0.002327751944484091,
+    "confusion_matrix": [
+        [
+            194807,
+            88
+        ],
+        [
+            1855,
+            782937
+        ]
+    ],
+    "training_time": "96.4s (Real)",
+    "inference_time": "1.5ms (Real)",
+    "description": "Real XGBoost gradient boosting model trained on 100% KDD Cup 99 dataset.",
+    "hyperparameters": "{'objective': 'multi:softprob', 'base_score': None, 'booster': None, 'callbacks': None, 'colsample_bylevel': None, 'colsample_bynode': None, 'colsample_bytree': None, 'device': None, 'early_stopping_rounds': None, 'enable_categorical': False, 'eval_metric': None, 'feature_types': None, 'feature_weights': None, 'gamma': None, 'grow_policy': None, 'importance_type': None, 'interaction_constraints': None, 'learning_rate': 0.1, 'max_bin': None, 'max_cat_threshold': None, 'max_cat_to_onehot': None, 'max_delta_step': None, 'max_depth': 8, 'max_leaves': None, 'min_child_weight': None, 'missing': nan, 'monotone_constraints': None, 'multi_strategy': None, 'n_estimators': 50, 'n_jobs': -1, 'num_parallel_tree': None, 'random_state': 42, 'reg_alpha': None, 'reg_lambda': None, 'sampling_method': None, 'scale_pos_weight': None, 'subsample': None, 'tree_method': None, 'validate_parameters': None, 'verbosity': None}",
+    "feature_importance": {
+        "src_bytes": 0.027617530897259712,
+        "dst_bytes": 0.02006792090833187,
+        "duration": 0.004873237572610378,
+        "count": 0.8581296801567078,
+        "srv_count": 0.01880727894604206,
+        "protocol": 0.07050429284572601
+    },
+    "classes": [
+        "Brute Force",
+        "DoS",
+        "Infiltration",
+        "Normal",
+        "Port Scan"
+    ]
+}

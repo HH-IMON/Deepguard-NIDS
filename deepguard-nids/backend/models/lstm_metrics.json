@@ -1,0 +1,36 @@
+{
+    "accuracy": 0.9880165808059105,
+    "precision": 0.9934638351231901,
+    "recall": 0.9880165808059105,
+    "f1_score": 0.9898738476186254,
+    "false_positive_rate": 0.006536164876809858,
+    "confusion_matrix": [
+        [
+            184857,
+            10038
+        ],
+        [
+            1027,
+            783765
+        ]
+    ],
+    "training_time": "2120.9s (Real)",
+    "inference_time": "1.5ms (Real)",
+    "description": "Deep Neural Network (MLP) representing temporal patterns, trained on 100% KDD dataset.",
+    "hyperparameters": "{'activation': 'relu', 'alpha': 0.0001, 'batch_size': 'auto', 'beta_1': 0.9, 'beta_2': 0.999, 'early_stopping': False, 'epsilon': 1e-08, 'hidden_layer_sizes': (100, 50), 'learning_rate': 'constant', 'learning_rate_init': 0.001, 'max_fun': 15000, 'max_iter': 20, 'momentum': 0.9, 'n_iter_no_change': 10, 'nesterovs_momentum': True, 'power_t': 0.5, 'random_state': 42, 'shuffle': True, 'solver': 'adam', 'tol': 0.0001, 'validation_fraction': 0.1, 'verbose': False, 'warm_start': False}",
+    "feature_importance": {
+        "src_bytes": 0.16666666666666666,
+        "dst_bytes": 0.16666666666666666,
+        "duration": 0.16666666666666666,
+        "count": 0.16666666666666666,
+        "srv_count": 0.16666666666666666,
+        "protocol": 0.16666666666666666
+    },
+    "classes": [
+        "Brute Force",
+        "DoS",
+        "Infiltration",
+        "Normal",
+        "Port Scan"
+    ]
+}

@@ -1,0 +1,18 @@
+# DeepGuard NIDS - Requirements
+# Compatible with Python 3.14+
+
+# Web Framework
+flask>=3.0.0
+flask-cors>=4.0.0
+
+# Database
+sqlalchemy>=2.0.40
+pymysql>=1.1.0
+
+# Utilities
+python-dotenv>=1.0.0
+
+# Machine Learning
+scikit-learn>=1.3.0
+pandas>=2.0.0
+joblib>=1.3.0
